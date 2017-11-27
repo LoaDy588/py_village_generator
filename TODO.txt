@@ -1,0 +1,9 @@
+- a simple road generation - 1) grid 2) erase some roads 3) add some diagonals 4) move nodes randomly-ish
+- then place more features
+- features to add:
+roads
+houses
+squares(markets)
+castles/large buildings
+city walls
+names?
