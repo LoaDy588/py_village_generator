@@ -1,9 +1,10 @@
-- a simple road generation - 1) grid 2) erase some roads 3) add some diagonals 4) move nodes randomly-ish
-- then place more features
-- features to add:
-roads
-houses
-squares(markets)
-castles/large buildings
-city walls
-names?
+general working idea:
+1) generate grid
+2) each cell has properties - road, river, forest, village, castle(castle entry)
+    - some permutations dont work:castle + anything, village+forest, village+river
+3) connect castle to village, village to some grid edge by road(some simple algorithm?)
+4) generate the image, cell by cell - dont make the grid uniform maybe?
+
+Notes:
+ - trees can overlay roads(shadowing them)
+ - if enough time left, maybe add some random scatter? or lakes
