@@ -8,11 +8,11 @@ class Map_gen:
         self.GRID_X = 20
         self.GRID_Y = 20
         self.VILLAGE_SIZE = 10
-        self.FOREST_COUNT = 2
-        self.FOREST_SIZE = 10
+        self.FOREST_COUNT = 1
+        self.FOREST_SIZE = 200
         self.RIVER = True
         self.CASTLE = True
-        self.CASTLE_SIZE = 2
+        self.CASTLE_SIZE = 3
         self.map = []
 
         # village and castle points for path finding purposes
@@ -44,7 +44,7 @@ class Map_gen:
         if self.CASTLE:
             self.__create_castle()
         self.__create_village()
-        self.__create_roads()
+#        self.__create_roads()  # might support in future
         for i in range(self.FOREST_COUNT):
             self.__create_forest()
 
@@ -64,34 +64,34 @@ class Map_gen:
 
         # pick random start point of the river
         if dir_rand == "E":
-            start = (0, random.randint(0, self.GRID_Y-1))
+            start = (0, random.randint(1, self.GRID_Y-2))
             max_length = self.GRID_X
         elif dir_rand == "N":
-            start = (random.randint(0, self.GRID_X-1), 0)
+            start = (random.randint(1, self.GRID_X-2), 0)
             max_length = self.GRID_Y
         elif dir_rand == "W":
-            start = (self.GRID_X-1, random.randint(0, self.GRID_Y-1))
+            start = (self.GRID_X-1, random.randint(1, self.GRID_Y-2))
             max_length = self.GRID_X
         elif dir_rand == "S":
-            start = (random.randint(0, self.GRID_X-1), self.GRID_Y-1)
+            start = (random.randint(1, self.GRID_X-2), self.GRID_Y-1)
             max_length = self.GRID_Y
 
         # generate river
         side_step = 0
         current = start
-        for i in range(max_length):
+        for i in range(1, max_length+1):
             river_points.append(current)
             # stop generation if river touches edge
-            if (current[0] == self.GRID_X-1 or current[0] == 0) and i != 0:
+            if (current[0] == self.GRID_X-1 or current[0] == 0) and i != 1:
                 break
-            if (current[1] == self.GRID_Y-1 or current[1] == 0) and i != 0:
+            if (current[1] == self.GRID_Y-1 or current[1] == 0) and i != 1:
                 break
             # calculate next point
             side_step = random.randint(-1, 1)
             if dir_rand == "E" or dir_rand == "W":
-                current = (current[0]+i*direction[0], current[1]+side_step)
+                current = (current[0]+direction[0], current[1]+side_step)
             elif dir_rand == "N" or dir_rand == "S":
-                current = (current[0]+side_step, current[1]+i*direction[1])
+                current = (current[0]+side_step, current[1]+direction[1])
 
         # put river points on map
         for point in river_points:
@@ -107,12 +107,12 @@ class Map_gen:
         start_x = random.randint(0, self.GRID_X-1)
         start_y = random.randint(0, self.GRID_Y-1)
         while self.map[start_x][start_y]["river"]:
-            start_x = random.randint(0, self.GRID_X-1)
-            start_y = random.randint(0, self.GRID_Y-1)
+            self.__create_castle()
+            return
 
         # create endpoint.
-        end_x = start_x + self.CASTLE_SIZE
-        end_y = start_y + self.CASTLE_SIZE
+        end_x = start_x + self.CASTLE_SIZE - 1
+        end_y = start_y + self.CASTLE_SIZE - 1
 
         # test if castle sits in the field and not on river
         if start_x > self.GRID_X-1 or start_y > self.GRID_Y-1:
@@ -132,8 +132,9 @@ class Map_gen:
             if self.map[point[0]][point[1]]["river"]:
                 self.__create_castle()
                 return
-            else:
-                self.map[point[0]][point[1]]["castle"] = True
+
+        for point in castle_points:
+            self.map[point[0]][point[1]]["castle"] = True
 
     def __create_village(self):
         """
@@ -173,10 +174,6 @@ class Map_gen:
         for point in village_points:
             self.map[point[0]][point[1]]["village"] = True
 
-    def __create_roads(self):
-        print("roads")
-        # create roads between castle, village and map edge
-
     def __create_forest(self):
         """
         Create randomly shaped, randomly placed forest in a map.
@@ -201,6 +198,9 @@ class Map_gen:
                                                 (self.GRID_X, self.GRID_Y))
                 point = neighbors[random.randint(0, len(neighbors)-1)]
                 while self.map[point[0]][point[1]]["castle"]:
+                    point = neighbors[random.randint(0, len(neighbors)-1)]
+                    neighbors.remove(point)
+                while self.map[point[0]][point[1]]["village"]:
                     point = neighbors[random.randint(0, len(neighbors)-1)]
                     neighbors.remove(point)
                 forest_points.append(point)
