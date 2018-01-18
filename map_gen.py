@@ -39,6 +39,7 @@ class Map_gen:
 
     def create_map(self):
         """Create map."""
+        self.clear_map()
         if self.RIVER:
             self.__create_river()
         if self.CASTLE:

@@ -6,14 +6,14 @@ mg = Map_gen()
 ig = Image_gen()
 
 # map generator settings
-mg.GRID_X = 20  # size of grid to generate map on
+mg.GRID_X = 20
 mg.GRID_Y = 20
-mg.VILLAGE_SIZE = 35
+mg.VILLAGE_SIZE = 20
 mg.FOREST_COUNT = 1
-mg.FOREST_SIZE = 200
+mg.FOREST_SIZE = 150
 mg.RIVER = True
 mg.CASTLE = True
-mg.CASTLE_SIZE = 3
+mg.CASTLE_SIZE = 2
 
 # image generator settings
 ig.IMG_SIZE = (400, 400)

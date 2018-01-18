@@ -134,7 +134,9 @@ class Image_gen:
             density = self.FOREST_DENSITY
         # start planting trees
         counter = 0
-        while counter <= density:
+        limiter = 0
+        while counter <= density and limiter <= 100:
+            limiter += 1
             # get random coords in the cell
             x = random.randint(0, self.CELL_X-1)
             y = random.randint(0, self.CELL_Y-1)
@@ -174,7 +176,9 @@ class Image_gen:
                                   (self.CELL_ORIGINS[pos_x][pos_y][0]+self.CELL_X,
                                   self.CELL_ORIGINS[pos_x][pos_y][1]+self.CELL_Y))
         counter = 0
-        while counter <= self.VILLAGE_DENSITY:
+        limiter = 0
+        while counter <= self.VILLAGE_DENSITY and limiter <= 100:
+            limiter += 1
             # generate random house in cell
             x = random.randint(0, self.CELL_X-1)
             y = random.randint(0, self.CELL_Y-1)
